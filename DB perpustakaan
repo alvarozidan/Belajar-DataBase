@@ -1,0 +1,158 @@
+C:\laragon\www
+λ mysql -u root
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 9
+Server version: 8.4.3 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create database perpustakaan; //create = buat db perpustakaan
+
+mysql> use perpustakaan //use = masuk ke dalam db perpustakaan
+Database changed
+mysql> create table buku( //create = buat tabel buku di dalam db perpustakaan
+    -> id_buku INT AUTO_INCREMENT PRIMARY KEY,
+    -> judul VARCHAR(100),
+    -> penulis VARCHAR(50),
+    -> tahun_terbit INT,
+    -> penerbit VARCHAR(50));
+
+mysql> insert into buku(judul, penulis, tahun_terbit, penerbit) values //insert into masukin data ke dalam tabel buku
+    -> ('Pemrograman SQL', 'Andi', 2020, 'Gramedia'),
+    -> ('Database Fundamentals', 'Budi', 2019, 'Erlangga'),
+    -> ('Data Science', 'Cahyo', 2021, 'Tech Press'),
+    -> ('Machine Learning', 'Deni', 2022, 'Pustaka Jaya'),
+    -> ('Web Development', 'Eka', 2023, 'Indo Book');
+
+mysql> select * from buku; //SELECT * nampilin semua data yang ada di dalem tabel buku
++---------+-----------------------+---------+--------------+--------------+
+| id_buku | judul                 | penulis | tahun_terbit | penerbit     |
++---------+-----------------------+---------+--------------+--------------+
+|       1 | Pemrograman SQL       | Andi    |         2020 | Gramedia     |
+|       2 | Database Fundamentals | Budi    |         2019 | Erlangga     |
+|       3 | Data Science          | Cahyo   |         2021 | Tech Press   |
+|       4 | Machine Learning      | Deni    |         2022 | Pustaka Jaya |
+|       5 | Web Development       | Eka     |         2023 | Indo Book    |
++---------+-----------------------+---------+--------------+--------------+
+
+mysql> UPDATE buku SET judul='Data Science untuk Pemula', penulis='Cahyo Utomo' WHERE id_buku=3; //UPDATE=buat ngubah data di dalem tabel buku, set= apa yang mau diubah WHERE= yang diubah yang mana
+
+mysql> select * from buku;
++---------+---------------------------+-------------+--------------+--------------+
+| id_buku | judul                     | penulis     | tahun_terbit | penerbit     |
++---------+---------------------------+-------------+--------------+--------------+
+|       1 | Pemrograman SQL           | Andi        |         2020 | Gramedia     |
+|       2 | Database Fundamentals     | Budi        |         2019 | Erlangga     |
+|       3 | Data Science untuk Pemula | Cahyo Utomo |         2021 | Tech Press   |
+|       4 | Machine Learning          | Deni        |         2022 | Pustaka Jaya |
+|       5 | Web Development           | Eka         |         2023 | Indo Book    |
++---------+---------------------------+-------------+--------------+--------------+
+
+mysql> DELETE FROM buku WHERE id_buku=5; //DELETE= hapus data WHERE=yang mana yang dihapus from=dari
+
+mysql> select * from buku;
++---------+---------------------------+-------------+--------------+--------------+
+| id_buku | judul                     | penulis     | tahun_terbit | penerbit     |
++---------+---------------------------+-------------+--------------+--------------+
+|       1 | Pemrograman SQL           | Andi        |         2020 | Gramedia     |
+|       2 | Database Fundamentals     | Budi        |         2019 | Erlangga     |
+|       3 | Data Science untuk Pemula | Cahyo Utomo |         2021 | Tech Press   |
+|       4 | Machine Learning          | Deni        |         2022 | Pustaka Jaya |
++---------+---------------------------+-------------+--------------+--------------+
+
+mysql> SELECT * FROM buku WHERE tahun_terbit > 2020; //SELECT* = pilih semua data dari buku WHERE= yang mana tahun terbitnya > 2020
++---------+---------------------------+-------------+--------------+--------------+
+| id_buku | judul                     | penulis     | tahun_terbit | penerbit     |
++---------+---------------------------+-------------+--------------+--------------+
+|       3 | Data Science untuk Pemula | Cahyo Utomo |         2021 | Tech Press   |
+|       4 | Machine Learning          | Deni        |         2022 | Pustaka Jaya |
++---------+---------------------------+-------------+--------------+--------------+
+
+mysql> SELECT * FROM buku WHERE judul LIKE '%data%'; //SELECT* = pilih semua data dari buku WHERE= yang mana judulnya ada kata/sama dengan data
++---------+---------------------------+-------------+--------------+------------+
+| id_buku | judul                     | penulis     | tahun_terbit | penerbit   |
++---------+---------------------------+-------------+--------------+------------+
+|       2 | Database Fundamentals     | Budi        |         2019 | Erlangga   |
+|       3 | Data Science untuk Pemula | Cahyo Utomo |         2021 | Tech Press |
++---------+---------------------------+-------------+--------------+------------+
+
+mysql> create table penulis( //buat  tabel penulis sama isine
+    -> id_Penulis INT AUTO_INCREMENT PRIMARY KEY,
+    -> nama_penulis varchar(50),
+    -> negara_asal varchar(50));
+
+mysql> insert into penulis(nama_penulis, negara_asal) values //ngisi tabel penulis
+    -> ('Andi', 'Indonesia'),
+    -> ('Budi', 'Indonesia'),
+    -> ('Cahyo', 'Indonesia');
+
+mysql> alter table buku add column id_penulis int; //nambah kolom id_penulis di tabel buku
+
+mysql> update buku set id_penulis=1 where id_buku=1; //ngubah data tabel buku kalau id_buku = 1 berarti id_Penulis juga 1, ini biar bisa inisialisasi nama penulis sesuai id
+
+mysql> SELECT buku.id_buku, buku.judul, buku.tahun_terbit, buku.penerbit, penulis.nama_penulis FROM buku JOIN penulis ON buku.id_penulis = penulis.id_Penulis;
++---------+-----------------+--------------+----------+--------------+
+| id_buku | judul           | tahun_terbit | penerbit | nama_penulis |
++---------+-----------------+--------------+----------+--------------+
+|       1 | Pemrograman SQL |         2020 | Gramedia | Andi         |
++---------+-----------------+--------------+----------+--------------+
+1 row in set (0.00 sec)
+
+mysql> select * from buku; //disini data id_Penulis cuma id 1 yang lain e null gara gara yang di inisialisasi cuma id= 1
++---------+---------------------------+-------------+--------------+--------------+------------+
+| id_buku | judul                     | penulis     | tahun_terbit | penerbit     | id_penulis |
++---------+---------------------------+-------------+--------------+--------------+------------+
+|       1 | Pemrograman SQL           | Andi        |         2020 | Gramedia     |          1 |
+|       2 | Database Fundamentals     | Budi        |         2019 | Erlangga     |       NULL |
+|       3 | Data Science untuk Pemula | Cahyo Utomo |         2021 | Tech Press   |       NULL |
+|       4 | Machine Learning          | Deni        |         2022 | Pustaka Jaya |       NULL |
++---------+---------------------------+-------------+--------------+--------------+------------+
+
+mysql> update buku set id_penulis=2 where id_buku=2; //jadi buat update ditambahi id 2 - 4
+
+mysql> update buku set id_penulis=3 where id_buku=3;
+
+mysql> update buku set id_penulis=4 where id_buku=4;
+
+mysql> select * from buku; //cek data tabel buku id penulis udah gak null
++---------+---------------------------+-------------+--------------+--------------+------------+
+| id_buku | judul                     | penulis     | tahun_terbit | penerbit     | id_penulis |
++---------+---------------------------+-------------+--------------+--------------+------------+
+|       1 | Pemrograman SQL           | Andi        |         2020 | Gramedia     |          1 |
+|       2 | Database Fundamentals     | Budi        |         2019 | Erlangga     |          2 |
+|       3 | Data Science untuk Pemula | Cahyo Utomo |         2021 | Tech Press   |          3 |
+|       4 | Machine Learning          | Deni        |         2022 | Pustaka Jaya |          4 |
++---------+---------------------------+-------------+--------------+--------------+------------+
+
+mysql> SELECT buku.id_buku, buku.judul, buku.tahun_terbit, buku.penerbit, penulis.nama_penulis FROM buku JOIN penulis ON buku.id_penulis = penulis.id_Penulis;
++---------+---------------------------+--------------+------------+--------------+
+| id_buku | judul                     | tahun_terbit | penerbit   | nama_penulis |
++---------+---------------------------+--------------+------------+--------------+
+|       1 | Pemrograman SQL           |         2020 | Gramedia   | Andi         |
+|       2 | Database Fundamentals     |         2019 | Erlangga   | Budi         |
+|       3 | Data Science untuk Pemula |         2021 | Tech Press | Cahyo        |
++---------+---------------------------+--------------+------------+--------------+
+
+//disini cuma muncul 3 data bukan 4 gara gara di tabel penulis belum ada yang namane deni
+
+mysql> insert into penulis(nama_penulis, negara_asal) values //jadi dimasukin dulu deni ke dalam tabel penulis
+    -> ('Deni', 'Indonesia');
+
+mysql> SELECT buku.id_buku, buku.judul, buku.tahun_terbit, buku.penerbit, penulis.nama_penulis FROM buku JOIN penulis ON buku.id_penulis = penulis.id_Penulis;
++---------+---------------------------+--------------+--------------+--------------+
+| id_buku | judul                     | tahun_terbit | penerbit     | nama_penulis |
++---------+---------------------------+--------------+--------------+--------------+
+|       1 | Pemrograman SQL           |         2020 | Gramedia     | Andi         |
+|       2 | Database Fundamentals     |         2019 | Erlangga     | Budi         |
+|       3 | Data Science untuk Pemula |         2021 | Tech Press   | Cahyo        |
+|       4 | Machine Learning          |         2022 | Pustaka Jaya | Deni         |
++---------+---------------------------+--------------+--------------+--------------+
+
+//Dan yap muncul semua
+//JOIN=ngehubungin antara tabel buku sama tabel penulis (relasi)

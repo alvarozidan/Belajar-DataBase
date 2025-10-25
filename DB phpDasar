@@ -1,0 +1,197 @@
+C:\laragon\www
+λ mysql -u root
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 9
+Server version: 8.4.3 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| apaya              |
+| coba               |
+| information_schema |
+| mysql              |
+| performance_schema |
+| perpustakaan       |
+| sekolah            |
+| sys                |
+| topup              |
++--------------------+
+
+mysql> create database phpDasar;
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| apaya              |
+| coba               |
+| information_schema |
+| mysql              |
+| performance_schema |
+| perpustakaan       |
+| phpdasar           |
+| sekolah            |
+| sys                |
+| topup              |
++--------------------+
+
+mysql> use phpDasar;
+Database changed
+mysql> create table Mahasiswa(
+    -> id int primary key auto_increment,
+    -> nama varchar(100),
+    -> nis char(5),
+    -> email varchar(100),
+    -> jurusan varchar(100),
+    -> gambar varchar(100));
+
+mysql> desc mahasiswa;
++---------+--------------+------+-----+---------+----------------+
+| Field   | Type         | Null | Key | Default | Extra          |
++---------+--------------+------+-----+---------+----------------+
+| id      | int          | NO   | PRI | NULL    | auto_increment |
+| nama    | varchar(100) | YES  |     | NULL    |                |
+| nis     | char(5)      | YES  |     | NULL    |                |
+| email   | varchar(100) | YES  |     | NULL    |                |
+| jurusan | varchar(100) | YES  |     | NULL    |                |
+| gambar  | varchar(100) | YES  |     | NULL    |                |
++---------+--------------+------+-----+---------+----------------+
+
+mysql> insert into mahasiswa(nama, nis, email, jurusan, gambar) values(
+    -> 'Alvaro Zidane',
+    -> '16893',
+    -> 'shuuu@gmail.com',
+    -> 'Psikologi',
+    -> 'ALVARO ZIDANE_FOTO MERAH.jpg');
+
+mysql> select * from mahasiswa;
++----+---------------+-------+-----------------+-----------+------------------------------+
+| id | nama          | nis   | email           | jurusan   | gambar
+       |
++----+---------------+-------+-----------------+-----------+------------------------------+
+|  1 | Alvaro Zidane | 16893 | shuuu@gmail.com | Psikologi | ALVARO ZIDANE_FOTO MERAH.jpg |
++----+---------------+-------+-----------------+-----------+------------------------------+
+
+mysql> insert into mahasiswa(nama, nis, email, jurusan, gambar) values(
+    -> 'Awal Ilham',
+    -> '17252',
+    -> 'AwalRamdani@gmail.com',
+    -> 'Akutansi',
+    -> 'Awaludin.jpg');
+
+mysql> insert into mahasiswa(nama, nis, email, jurusan, gambar) values(
+    -> 'Farros',
+    -> '16926',
+    -> 'ultramanzero@gmail.com',
+    -> 'Teknik elektro',
+    -> 'zaid.png');
+
+mysql> desc mahasiswa;
++---------+--------------+------+-----+---------+----------------+
+| Field   | Type         | Null | Key | Default | Extra          |
++---------+--------------+------+-----+---------+----------------+
+| id      | int          | NO   | PRI | NULL    | auto_increment |
+| nama    | varchar(100) | YES  |     | NULL    |                |
+| nis     | char(5)      | YES  |     | NULL    |                |
+| email   | varchar(100) | YES  |     | NULL    |                |
+| jurusan | varchar(100) | YES  |     | NULL    |                |
+| gambar  | varchar(100) | YES  |     | NULL    |                |
++---------+--------------+------+-----+---------+----------------+
+
+mysql> select * from mahasiswa;
++----+---------------+-------+------------------------+----------------+------------------------------+
+| id | nama          | nis   | email                  | jurusan        | gambar
+                   |
++----+---------------+-------+------------------------+----------------+------------------------------+
+|  1 | Alvaro Zidane | 16893 | shuuu@gmail.com        | Psikologi      | ALVARO ZIDANE_FOTO MERAH.jpg |
+|  2 | Awal Ilham    | 17252 | AwalRamdani@gmail.com  | Akutansi       | Awaludin.jpg                 |
+|  3 | Farros        | 16926 | ultramanzero@gmail.com | Teknik elektro | zaid.png
+                   |
++----+---------------+-------+------------------------+----------------+------------------------------+
+
+mysql> select nis from mahasiswa;
++-------+
+| nis   |
++-------+
+| 16893 |
+| 17252 |
+| 16926 |
++-------+
+
+mysql> select nama, nis from mahasiswa;
++---------------+-------+
+| nama          | nis   |
++---------------+-------+
+| Alvaro Zidane | 16893 |
+| Awal Ilham    | 17252 |
+| Farros        | 16926 |
++---------------+-------+
+
+mysql> select * from mahasiswa where nis=16893;
++----+---------------+-------+-----------------+-----------+------------------------------+
+| id | nama          | nis   | email           | jurusan   | gambar
+       |
++----+---------------+-------+-----------------+-----------+------------------------------+
+|  1 | Alvaro Zidane | 16893 | shuuu@gmail.com | Psikologi | ALVARO ZIDANE_FOTO MERAH.jpg |
++----+---------------+-------+-----------------+-----------+------------------------------+
+
+mysql> update mahasiswa set jurusan='Teknik telekomunikasi' where id = 3;
+
+mysql> select * from mahasiswa;
++----+---------------+-------+------------------------+-----------------------+------------------------------+
+| id | nama          | nis   | email                  | jurusan               | gambar                       |
++----+---------------+-------+------------------------+-----------------------+------------------------------+
+|  1 | Alvaro Zidane | 16893 | shuuu@gmail.com        | Psikologi             | ALVARO ZIDANE_FOTO MERAH.jpg |
+|  2 | Awal Ilham    | 17252 | AwalRamdani@gmail.com  | Akutansi              | Awaludin.jpg                 |
+|  3 | Farros        | 16926 | ultramanzero@gmail.com | Teknik telekomunikasi | zaid.png                     |
++----+---------------+-------+------------------------+-----------------------+------------------------------+
+
+mysql> insert into mahasiswa(nama, nis, email, jurusan, gambar) values(
+    -> 'Danish',
+    -> '16907',
+    -> 'rahman@gmail.com',
+    -> 'Teknik Informatika',
+    -> 'Danish.jpeg');
+
+mysql> delete from mahasiswa where id = 4;
+
+mysql> select * from mahasiswa;
++----+---------------+-------+------------------------+-----------------------+------------------------------+
+| id | nama          | nis   | email                  | jurusan               | gambar                       |
++----+---------------+-------+------------------------+-----------------------+------------------------------+
+|  1 | Alvaro Zidane | 16893 | shuuu@gmail.com        | Psikologi             | ALVARO ZIDANE_FOTO MERAH.jpg |
+|  2 | Awal Ilham    | 17252 | AwalRamdani@gmail.com  | Akutansi              | Awaludin.jpg                 |
+|  3 | Farros        | 16926 | ultramanzero@gmail.com | Teknik telekomunikasi | zaid.png                     |
++----+---------------+-------+------------------------+-----------------------+------------------------------+
+
+mysql> drop table mahasiswa;
+
+mysql> select * from mahasiswa; //tabel mahasiswa hilang
+ERROR 1146 (42S02): Table 'phpdasar.mahasiswa' doesn't exist
+
+mysql> drop database phpDasar; 
+
+mysql> show databases; //DB phpDasar hilang
++--------------------+
+| Database           |
++--------------------+
+| apaya              |
+| coba               |
+| information_schema |
+| mysql              |
+| performance_schema |
+| perpustakaan       |
+| sekolah            |
+| sys                |
+| topup              |
++--------------------+

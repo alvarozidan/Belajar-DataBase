@@ -1,0 +1,252 @@
+C:\laragon\www
+λ mysql -u root
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 20
+Server version: 8.4.3 MySQL Community Server - GPL
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> CREATE DATABASE toko_elektronik;
+Query OK, 1 row affected (0.02 sec)
+
+mysql> use toko_elektronik;
+Database changed
+mysql> CREATE TABLE produk(
+    -> id_produk INT PRIMARY KEY,
+    -> nama_produk VARCHAR(100),
+    -> kategori VARCHAR(100),
+    -> harga DECIMAL(15,2),
+    -> stok INT
+    -> );
+Query OK, 0 rows affected (0.09 sec)
+
+mysql> CREATE TABLE pelanggan(
+    -> id_pelanggan INT PRIMARY KEY,
+    -> nama_pelanggan VARCHAR(100),
+    -> kota VARCHAR(100)
+    -> );
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> INSERT INTO produk(id_produk, nama_produk,kategori, harga, stok) VALUES
+    -> (1, 'HP Samsung A07', 'Smartphone', 1700000, 100),
+    -> (2, 'HP OPPO A60', 'Smartphone', 2500000, 20),
+    -> (3, 'Laptop HP 14', 'Laptop', 8000000, 10),
+    -> (4, 'Laptop Asus Zenbook 14 OLED', 'Laptop', 15000000, 5),
+    -> (5, 'Headset IEM', 'Aksesoris', 200000, 46);
+Query OK, 5 rows affected (0.04 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO pelanggan(id_pelanggan, nama_pelanggan,kota) VALUES
+    -> (1, 'Ilham', 'Jakarta'),
+    -> (2, 'Danish', 'Jakarta'),
+    -> (3, 'Alvaro', 'Bandung'),
+    -> (4, 'Ghifar', 'Bandung'),
+    -> (5, 'Mubin', 'Bekasi');
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM produk;
++-----------+-----------------------------+------------+-------------+------+
+| id_produk | nama_produk                 | kategori   | harga       | stok |
++-----------+-----------------------------+------------+-------------+------+
+|         1 | HP Samsung A07              | Smartphone |  1700000.00 |  100 |
+|         2 | HP OPPO A60                 | Smartphone |  2500000.00 |   20 |
+|         3 | Laptop HP 14                | Laptop     |  8000000.00 |   10 |
+|         4 | Laptop Asus Zenbook 14 OLED | Laptop     | 15000000.00 |    5 |
+|         5 | Headset IEM                 | Aksesoris  |   200000.00 |   46 |
++-----------+-----------------------------+------------+-------------+------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT nama_produk, harga FROM produk;
++-----------------------------+-------------+
+| nama_produk                 | harga       |
++-----------------------------+-------------+
+| HP Samsung A07              |  1700000.00 |
+| HP OPPO A60                 |  2500000.00 |
+| Laptop HP 14                |  8000000.00 |
+| Laptop Asus Zenbook 14 OLED | 15000000.00 |
+| Headset IEM                 |   200000.00 |
++-----------------------------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT * FROM pelanggan WHERE kota='Jakarta';
++--------------+----------------+---------+
+| id_pelanggan | nama_pelanggan | kota    |
++--------------+----------------+---------+
+|            1 | Ilham          | Jakarta |
+|            2 | Danish         | Jakarta |
++--------------+----------------+---------+
+2 rows in set (0.00 sec)
+
+mysql> INSERT INTO produk(id_produk, nama_produk,kategori, harga, stok) VALUES
+    -> (6, 'Headset Xiaomi', 'Aksesoris', 210000, 45);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> CREATE TABEL transaksi(
+    -> id_transaksi INT PRIMARY KEY,
+    -> id_produk INT,
+    -> id_pelanggan INT,
+    -> jumlah INT,
+    -> FOREIGN KEY(id_produk) REFERENCES produk(id_produk),
+    -> FOREIGN KEY(id_pelanggan) REFERENCES produk(id_pelanggan),
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'TABEL transaksi(
+id_transaksi INT PRIMARY KEY,
+id_produk INT,
+id_pelanggan INT,
+' at line 1
+mysql> CREATE TABLE transaksi(
+    -> id_transaksi INT PRIMARY KEY,
+    -> id_produk INT,
+    -> id_pelanggan INT,
+    -> jumlah INT,
+    -> FOREIGN KEY(id_produk) REFERENCES produk(id_produk),
+    -> FOREIGN KEY(id_pelanggan) REFERENCES produk(id_pelanggan),
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 8
+mysql> CREATE TABLE transaksi(
+    -> id_transaksi INT PRIMARY KEY,
+    -> id_produk INT,
+    -> id_pelanggan INT,
+    -> jumlah INT,
+    -> FOREIGN KEY(id_produk) REFERENCES produk(id_produk),
+    -> FOREIGN KEY(id_pelanggan) REFERENCES pelanggan(id_pelanggan),
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 8
+mysql> CREATE TABLE transaksi(
+    -> id_transaksi INT PRIMARY KEY,
+    -> id_produk INT,
+    -> id_pelanggan INT,
+    -> jumlah INT,
+    -> FOREIGN KEY(id_produk) REFERENCES produk(id_produk),
+    -> FOREIGN KEY(id_pelanggan) REFERENCES pelanggan(id_pelanggan));
+Query OK, 0 rows affected (0.18 sec)
+
+mysql> SELECT produk.nama_produk, pelanggan.nama_pelanggan FROM transaksi
+    -> JOIN produk ON transaksi.id_produk = produk.id_produk
+    -> JOIN pelanggan ON transaksi.id_pelanggan = pelanggan.id_pelanggan;
+Empty set (0.01 sec)
+
+mysql> INSERT INTO transaksi(id_transaksi, id_produk, id_pelanggan, jumlah) VALUES
+    -> (1,1,1,1),
+    -> (2,3,2,1),
+    -> (3,2,3,2),
+    -> (4,4,4,2),
+    -> (5,5,5,5);
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> SELECT produk.nama_produk, pelanggan.nama_pelanggan FROM transaksi JOIN produk ON transaksi.id_produk = produk.id_produk JOIN pelanggan ON transaksi.id_pelanggan = pelanggan.id_pelanggan;
++-----------------------------+----------------+
+| nama_produk                 | nama_pelanggan |
++-----------------------------+----------------+
+| HP Samsung A07              | Ilham          |
+| Laptop HP 14                | Danish         |
+| HP OPPO A60                 | Alvaro         |
+| Laptop Asus Zenbook 14 OLED | Ghifar         |
+| Headset IEM                 | Mubin          |
++-----------------------------+----------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT pelanggan.nama_pelanggan, produk.nama_produk, produk.kategori, produk.stok FROM transaksi
+    -> JOIN pelanggan on transaksi.id_pelanggan = pelanggan.id_pelanggan
+    -> JOIN produk on transaksi.id_produk = produk.id_produk
+    -> ;
++----------------+-----------------------------+------------+------+
+| nama_pelanggan | nama_produk                 | kategori   | stok |
++----------------+-----------------------------+------------+------+
+| Ilham          | HP Samsung A07              | Smartphone |  100 |
+| Danish         | Laptop HP 14                | Laptop     |   10 |
+| Alvaro         | HP OPPO A60                 | Smartphone |   20 |
+| Ghifar         | Laptop Asus Zenbook 14 OLED | Laptop     |    5 |
+| Mubin          | Headset IEM                 | Aksesoris  |   46 |
++----------------+-----------------------------+------------+------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT MAX(harga) AS produk_termahal FROM produk;
++-----------------+
+| produk_termahal |
++-----------------+
+|     15000000.00 |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT MIN(harga) AS produk_termurah FROM produk;
++-----------------+
+| produk_termurah |
++-----------------+
+|       200000.00 |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * FROM produk WHERE nama_produk LIKE '%HP%';
++-----------+----------------+------------+------------+------+
+| id_produk | nama_produk    | kategori   | harga      | stok |
++-----------+----------------+------------+------------+------+
+|         1 | HP Samsung A07 | Smartphone | 1700000.00 |  100 |
+|         2 | HP OPPO A60    | Smartphone | 2500000.00 |   20 |
+|         3 | Laptop HP 14   | Laptop     | 8000000.00 |   10 |
++-----------+----------------+------------+------------+------+
+3 rows in set (0.00 sec)
+
+mysql> UPDATE produk SET harga = 2500000 WHERE id_produk = 1;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE pelanggan SET kota = 'Jakarta' WHERE id_pelanggan = 5;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE pelanggan SET kota = 'Kalimade' WHERE id_pelanggan = 2;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> ALTER TABLE pelanggan ADD email VARCHAR(100);
+Query OK, 0 rows affected (0.07 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> DELETE FROM produk WHERE id_produk = 3;
+ERROR 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails (`toko_elektronik`.`transaksi`, CONSTRAINT `transaksi_ibfk_1` FOREIGN KEY (`id_produk`) REFERENCES `produk` (`id_produk`))
+mysql> DELETE FROM transaksi WHERE id_produk = 3;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> DELETE FROM produk WHERE id_produk = 3;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM produk;
++-----------+-----------------------------+------------+-------------+------+
+| id_produk | nama_produk                 | kategori   | harga       | stok |
++-----------+-----------------------------+------------+-------------+------+
+|         1 | HP Samsung A07              | Smartphone |  2500000.00 |  100 |
+|         2 | HP OPPO A60                 | Smartphone |  2500000.00 |   20 |
+|         4 | Laptop Asus Zenbook 14 OLED | Laptop     | 15000000.00 |    5 |
+|         5 | Headset IEM                 | Aksesoris  |   200000.00 |   46 |
+|         6 | Headset Xiaomi              | Aksesoris  |   210000.00 |   45 |
++-----------+-----------------------------+------------+-------------+------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT * FROM pelanggan;
++--------------+----------------+----------+-------+
+| id_pelanggan | nama_pelanggan | kota     | email |
++--------------+----------------+----------+-------+
+|            1 | Ilham          | Jakarta  | NULL  |
+|            2 | Danish         | Kalimade | NULL  |
+|            3 | Alvaro         | Bandung  | NULL  |
+|            4 | Ghifar         | Bandung  | NULL  |
+|            5 | Mubin          | Jakarta  | NULL  |
++--------------+----------------+----------+-------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT * FROM transaksi;
++--------------+-----------+--------------+--------+
+| id_transaksi | id_produk | id_pelanggan | jumlah |
++--------------+-----------+--------------+--------+
+|            1 |         1 |            1 |      1 |
+|            3 |         2 |            3 |      2 |
+|            4 |         4 |            4 |      2 |
+|            5 |         5 |            5 |      5 |
++--------------+-----------+--------------+--------+
+4 rows in set (0.00 sec)
